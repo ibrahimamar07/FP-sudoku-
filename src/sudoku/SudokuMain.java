@@ -1,3 +1,15 @@
+/**
+ * ES234317-Algorithm and Data Structures
+ * Semester Ganjil, 2024/2025
+ * Group Capstone Project
+ * Group #1
+ * 1 - 5026231195- ibrahim amar alfanani
+ * 2 - 5026231219- ghifari rabbani A
+ * 3 - 5026231180 - favian astama
+ */
+
+
+
 package sudoku;
 //
 ////TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -51,7 +63,7 @@ public class SudokuMain extends JFrame {
         JMenuBar menuBar = new JMenuBar();
 
         // File Menu
-        JMenu fileMenu = new JMenu("File");
+        JMenu fileMenu = new JMenu("Menu");
         JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(e -> {
             board.newGame(10);
@@ -73,7 +85,7 @@ public class SudokuMain extends JFrame {
         fileMenu.add(exitItem);
 
         // Options Menu
-        JMenu optionsMenu = new JMenu("Options");
+        JMenu optionsMenu = new JMenu("level");
         JMenuItem easyItem = new JMenuItem("Easy");
         easyItem.addActionListener(e -> {
             board.newGame(10);
@@ -100,7 +112,7 @@ public class SudokuMain extends JFrame {
         JMenu helpMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Sudoku Game\nCreated by [Your Name]\nEnjoy the game!",
+                "Sudoku Game\nCreated by kelompok 10 \nEnjoy the game!",
                 "About Sudoku", JOptionPane.INFORMATION_MESSAGE));
 
         helpMenu.add(aboutItem);
