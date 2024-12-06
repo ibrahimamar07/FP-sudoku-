@@ -58,7 +58,30 @@ public class Puzzle {
                 isGiven[row][col] = hardcodedIsGiven[row][col];
             }
         }
-    }
+        Random rand = new Random();
+        int totalCells = SudokuConstants.GRID_SIZE * SudokuConstants.GRID_SIZE;
+        int clues = totalCells - cellsToGuess;
 
-    //(For advanced students) use singleton design pattern for this class
+        // Tandai semua sebagai "not given" awalnya
+        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
+            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
+                isGiven[row][col] = false;
+            }
+        }
+
+        // Pilih "clues" secara acak untuk ditandai sebagai "given"
+        Set<Integer> givenPositions = new HashSet<>();
+        while (givenPositions.size() < clues) {
+            int position = rand.nextInt(totalCells);
+            givenPositions.add(position);
+        }
+
+        for (int position : givenPositions) {
+            int row = position / SudokuConstants.GRID_SIZE;
+            int col = position % SudokuConstants.GRID_SIZE;
+            isGiven[row][col] = true;
+        }
+    }
 }
+    //(For advanced students) use singleton design pattern for this class
+

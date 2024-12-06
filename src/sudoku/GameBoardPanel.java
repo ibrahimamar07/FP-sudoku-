@@ -219,5 +219,18 @@ public class GameBoardPanel extends JPanel {
             }
         }
     }
+
+    public void resetGame() {
+        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
+            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
+                cells[row][col].newGame(puzzle.numbers[row][col], puzzle.isGiven[row][col]);
+            }
+        }
+    }
+    
+    public void newGameWithDifficulty(int cellsToGuess) {
+        puzzle.newPuzzle(cellsToGuess);
+        newGame();
+    }
 }
 
