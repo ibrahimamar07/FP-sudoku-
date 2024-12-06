@@ -6,47 +6,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-///**
-// * The main Sudoku program
-// */
-//public class SudokuMain extends JFrame {
-//    private static final long serialVersionUID = 1L;  // to prevent serial warning
-//
-//    // private variables
-//    GameBoardPanel board = new GameBoardPanel();
-//    JButton btnNewGame = new JButton("New Game");
-//
-//    // Constructor
-//    public SudokuMain() {
-//        Container cp = getContentPane();
-//        cp.setLayout(new BorderLayout());
-//
-//        cp.add(board, BorderLayout.CENTER);
-//
-//        // Add a button to the south to re-start the game via board.newGame()
-//        // ......
-//
-//        // Initialize the game board to start the game
-//        board.newGame();
-//
-//        pack();     // Pack the UI components, instead of using setSize()
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  // to handle window-closing
-//        setTitle("Sudoku");
-//        setVisible(true);
-//    }
-//
-//    /** The entry main() entry method */
-//    public static void main(String[] args) {
-//        // [TODO 1] Check "Swing program template" on how to run
-//        //  the constructor of "SudokuMain"
-//        // .........
-//    }
-//}
-
-
-
-
-//package sudoku;
 public class SudokuMain extends JFrame {
     private static final long serialVersionUID = 1L;  // to prevent serial warning
     
@@ -58,6 +17,7 @@ public class SudokuMain extends JFrame {
     private JMenu fileMenu = new JMenu("File");
     private JMenu difficultyMenu = new JMenu("Difficulty");
     private JMenu helpMenu = new JMenu("Help");
+    Puzzle puzzle=new Puzzle();
 
     // Constructor
     public SudokuMain() {
@@ -80,7 +40,8 @@ public class SudokuMain extends JFrame {
         setJMenuBar(createMenuBar());
 
         // Mulai permainan
-        board.newGame();
+        //default pas mulai pertama adalah level easy tolong jangan dirubah yaaa
+        board.newGame(10);
         pack(); // Sesuaikan ukuran jendela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Sudoku");
@@ -93,7 +54,7 @@ public class SudokuMain extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(e -> {
-            board.newGame();
+            board.newGame(10);
             statusBar.setText("New game started!");
         });
 
@@ -108,27 +69,27 @@ public class SudokuMain extends JFrame {
 
         fileMenu.add(newGameItem);
         fileMenu.add(resetGameItem);
-        fileMenu.addSeparator(); // Tambahkan pemisah
+        fileMenu.addSeparator(); //  pemisah
         fileMenu.add(exitItem);
 
         // Options Menu
         JMenu optionsMenu = new JMenu("Options");
         JMenuItem easyItem = new JMenuItem("Easy");
         easyItem.addActionListener(e -> {
-            board.newGameWithDifficulty(10); // Contoh: 10 cell untuk ditebak
+            board.newGame(10);
             statusBar.setText("Easy difficulty selected.");
         });
 
         JMenuItem intermediateItem = new JMenuItem("Intermediate");
         intermediateItem.addActionListener(e -> {
-            board.newGameWithDifficulty(30); // Contoh: 30 cell untuk ditebak
             statusBar.setText("Intermediate difficulty selected.");
+            board.newGame(20);
         });
 
         JMenuItem difficultItem = new JMenuItem("Difficult");
         difficultItem.addActionListener(e -> {
-            board.newGameWithDifficulty(50); // Contoh: 50 cell untuk ditebak
             statusBar.setText("Difficult difficulty selected.");
+            board.newGame(50);
         });
 
         optionsMenu.add(easyItem);

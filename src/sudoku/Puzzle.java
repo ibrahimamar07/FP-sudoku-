@@ -1,63 +1,25 @@
 package sudoku;
 import java.util.*;
 
-/**
- * The Sudoku number puzzle to be solved
- */
 public class Puzzle {
-    // All variables have package access
-    // The numbers on the puzzle
     int[][] numbers = new int[SudokuConstants.GRID_SIZE][SudokuConstants.GRID_SIZE];
-    // The clues - isGiven (no need to guess) or need to guess
     boolean[][] isGiven = new boolean[SudokuConstants.GRID_SIZE][SudokuConstants.GRID_SIZE];
 
-    // Constructor
     public Puzzle() {
         super();
     }
 
-    // Generate a new puzzle given the number of cells to be guessed, which can be used
-    //  to control the difficulty level.
-    // This method shall set (or update) the arrays numbers and isGiven
+    /**
+     * Generate a new puzzle given the number of cells to be guessed.
+     * This method updates the arrays `numbers` and `isGiven`.
+     *
+     * @param cellsToGuess jumlah sel yang harus ditebak.
+     */
     public void newPuzzle(int cellsToGuess) {
-        // I hardcode a puzzle here for illustration and testing.
-        int[][] hardcodedNumbers =
-                {{5, 3, 4, 6, 7, 8, 9, 1, 2},
-                        {6, 7, 2, 1, 9, 5, 3, 4, 8},
-                        {1, 9, 8, 3, 4, 2, 5, 6, 7},
-                        {8, 5, 9, 7, 6, 1, 4, 2, 3},
-                        {4, 2, 6, 8, 5, 3, 7, 9, 1},
-                        {7, 1, 3, 9, 2, 4, 8, 5, 6},
-                        {9, 6, 1, 5, 3, 7, 2, 8, 4},
-                        {2, 8, 7, 4, 1, 9, 6, 3, 5},
-                        {3, 4, 5, 2, 8, 6, 1, 7, 9}};
+        // Generate angka-angka awal secara acak
+        generateSolvedPuzzle();
 
-        // Copy from hardcodedNumbers into the array "numbers"
-        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
-            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
-                numbers[row][col] = hardcodedNumbers[row][col];
-            }
-        }
-
-        // Need to use input parameter cellsToGuess!
-        // Hardcoded for testing, only 2 cells of "8" is NOT GIVEN
-        boolean[][] hardcodedIsGiven =
-                {{true, true, true, true, true, false, true, true, true},
-                        {true, true, true, true, true, true, true, true, false},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true},
-                        {true, true, true, true, true, true, true, true, true}};
-
-        // Copy from hardcodedIsGiven into array "isGiven"
-        for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
-            for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
-                isGiven[row][col] = hardcodedIsGiven[row][col];
-            }
-        }
+        // Tentukan petunjuk berdasarkan jumlah sel yang harus ditebak
         Random rand = new Random();
         int totalCells = SudokuConstants.GRID_SIZE * SudokuConstants.GRID_SIZE;
         int clues = totalCells - cellsToGuess;
@@ -82,6 +44,95 @@ public class Puzzle {
             isGiven[row][col] = true;
         }
     }
-}
-    //(For advanced students) use singleton design pattern for this class
 
+    /**
+     * Generate a solved Sudoku puzzle using randomized backtracking.
+     */
+    private boolean generateSolvedPuzzle() {
+        // Reset grid numbers
+        for (int i = 0; i < SudokuConstants.GRID_SIZE; i++) {
+            Arrays.fill(numbers[i], 0);
+        }
+        return solve(0, 0);
+    }
+
+    /**
+     * Solve the Sudoku puzzle using backtracking.
+     */
+    private boolean solve(int row, int col) {
+        // Jika kolom melebihi ukuran grid, lanjutkan ke baris berikutnya
+        if (col == SudokuConstants.GRID_SIZE) {
+            col = 0;
+            row++;
+            // Jika baris juga melebihi, berarti seluruh grid sudah terisi
+            if (row == SudokuConstants.GRID_SIZE) {
+                return true;
+            }
+        }
+
+        // Jika sel sudah terisi (angka yang diberikan), lewati
+        if (numbers[row][col] != 0) {
+            return solve(row, col + 1);
+        }
+
+        // Coba angka secara acak
+        List<Integer> randomNumbers = generateRandomNumbers();
+        for (int num : randomNumbers) {
+            if (isSafe(row, col, num)) {
+                numbers[row][col] = num;
+                if (solve(row, col + 1)) {
+                    return true;
+                }
+                // Jika gagal, reset dan coba angka berikutnya
+                numbers[row][col] = 0;
+            }
+        }
+
+        return false; // Jika tidak ada angka yang bisa ditempatkan, kembali
+    }
+
+    /**
+     * Periksa apakah angka aman untuk ditempatkan pada posisi tertentu
+     */
+    private boolean isSafe(int row, int col, int num) {
+        // Periksa baris
+        for (int c = 0; c < SudokuConstants.GRID_SIZE; c++) {
+            if (numbers[row][c] == num) {
+                return false;
+            }
+        }
+
+        // Periksa kolom
+        for (int r = 0; r < SudokuConstants.GRID_SIZE; r++) {
+            if (numbers[r][col] == num) {
+                return false;
+            }
+        }
+
+        // Periksa subgrid 3x3
+        int startRow = row - row % SudokuConstants.SUBGRID_SIZE;
+        int startCol = col - col % SudokuConstants.SUBGRID_SIZE;
+        for (int r = startRow; r < startRow + SudokuConstants.SUBGRID_SIZE; r++) {
+            for (int c = startCol; c < startCol + SudokuConstants.SUBGRID_SIZE; c++) {
+                if (numbers[r][c] == num) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Generate a list of numbers from 1 to GRID_SIZE in random order.
+     */
+    private List<Integer> generateRandomNumbers() {
+        List<Integer> randomNumbers = new ArrayList<>();
+        for (int i = 1; i <= SudokuConstants.GRID_SIZE; i++) {
+            randomNumbers.add(i);
+        }
+        Collections.shuffle(randomNumbers);
+        return randomNumbers;
+    }
+
+}
