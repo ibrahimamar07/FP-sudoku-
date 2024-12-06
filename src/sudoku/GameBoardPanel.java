@@ -29,9 +29,18 @@ public class GameBoardPanel extends JPanel {
     private Cell[][] cells = new Cell[SudokuConstants.GRID_SIZE][SudokuConstants.GRID_SIZE];
     private Puzzle puzzle = new Puzzle();
 
-    /** Constructor */
+    private AudioPlayer audioPlayer;
+    private boolean isSoundOn = true; // Default: sound is on
+    private JButton soundButton;
+
+
+    /**
+     * Constructor
+     */
     public GameBoardPanel() {
+        super.setLayout(new BorderLayout());
         super.setLayout(new GridLayout(SudokuConstants.GRID_SIZE, SudokuConstants.GRID_SIZE)); // JPanel
+
 
         // Allocate the 2D array of Cell and add to JPanel
         for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
@@ -39,6 +48,7 @@ public class GameBoardPanel extends JPanel {
                 cells[row][col] = new Cell(row, col);
                 super.add(cells[row][col]);
             }
+
         }
 
         // Allocate a common listener as the ActionEvent listener for all Cells
@@ -48,15 +58,18 @@ public class GameBoardPanel extends JPanel {
         for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
             for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
                 if (cells[row][col].isEditable()) {
-                    cells[row][col].addActionListener(listener);
+                    cells[row][col].addKeyListener(listener);
                 }
             }
         }
 
         super.setPreferredSize(new Dimension(BOARD_WIDTH, BOARD_HEIGHT));
+
     }
 
-    /** Generate a new puzzle and reset the game board of cells */
+    /**
+     * Generate a new puzzle and reset the game board of cells
+     */
     public void newGame(int a) {
         puzzle.newPuzzle(a);
 
@@ -67,7 +80,9 @@ public class GameBoardPanel extends JPanel {
         }
     }
 
-    /** Return true if the puzzle is solved */
+    /**
+     * Return true if the puzzle is solved
+     */
     public boolean isSolved() {
         for (int row = 0; row < SudokuConstants.GRID_SIZE; ++row) {
             for (int col = 0; col < SudokuConstants.GRID_SIZE; ++col) {
@@ -78,39 +93,57 @@ public class GameBoardPanel extends JPanel {
         }
         return true;
     }
+    //tanpa enter
 
-    /** Listener Inner Class for all editable Cells */
-    private class CellInputListener implements ActionListener {
+    /**
+     * Listener Inner Class for all editable Cells
+     */
+    private class CellInputListener implements KeyListener {
         @Override
-        public void actionPerformed(ActionEvent e) {
-            // Get a reference to the JTextField that triggers this action event
+        public void keyTyped(KeyEvent e) {
             Cell sourceCell = (Cell) e.getSource();
 
-            try {
-                // Retrieve the int entered
-                int numberIn = Integer.parseInt(sourceCell.getText());
+            char keyChar = e.getKeyChar();
+
+            if (Character.isDigit(keyChar)) {
+                int numberIn = Character.getNumericValue(keyChar);
 
                 // For debugging
                 System.out.println("You entered " + numberIn);
 
-                // Check the numberIn against sourceCell.number
+                // Check the input against the correct number
                 if (numberIn == sourceCell.number) {
                     sourceCell.status = CellStatus.CORRECT_GUESS;
+                    AudioPlayer.playSound("benar.wav");
                 } else {
                     sourceCell.status = CellStatus.WRONG_GUESS;
+                    AudioPlayer.playSound("salah.wav");
                 }
-
-                // Repaint the cell based on its status
+                sourceCell.setText(String.valueOf(numberIn));
                 sourceCell.paint();
 
                 // Check if the puzzle is solved
                 if (isSolved()) {
+                    AudioPlayer.playSound("win.wav");
                     JOptionPane.showMessageDialog(GameBoardPanel.this, "Congratulations! You solved the puzzle!");
                 }
-            } catch (NumberFormatException ex) {
-                sourceCell.setText(""); // Clear invalid input
+            } else {
+                // If invalid input, clear the field and show an error message
+                sourceCell.setText("");
                 JOptionPane.showMessageDialog(GameBoardPanel.this, "Invalid input. Please enter a number.");
             }
+
+            e.consume();
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
         }
     }
 
@@ -121,6 +154,7 @@ public class GameBoardPanel extends JPanel {
             }
         }
     }
-
 }
+
+
 

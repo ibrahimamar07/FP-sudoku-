@@ -34,6 +34,7 @@ public class SudokuMain extends JFrame {
     // Constructor
     public SudokuMain() {
         initializeUI();
+        AudioPlayer.playBackgroundMusic("backsound.wav");
     }
 
     private void initializeUI() {
@@ -66,12 +67,14 @@ public class SudokuMain extends JFrame {
         JMenu fileMenu = new JMenu("Menu");
         JMenuItem newGameItem = new JMenuItem("New Game");
         newGameItem.addActionListener(e -> {
+            AudioPlayer.playSound("klik.wav");
             board.newGame(10);
             statusBar.setText("New game started!");
         });
 
         JMenuItem resetGameItem = new JMenuItem("Reset Game");
         resetGameItem.addActionListener(e -> {
+            AudioPlayer.playSound("klik.wav");
             board.resetGame();
             statusBar.setText("Game reset!");
         });
