@@ -93,18 +93,21 @@ public class SudokuMain extends JFrame {
         easyItem.addActionListener(e -> {
             board.newGame(10);
             statusBar.setText("Easy difficulty selected.");
+            AudioPlayer.playSound("wow.wav");
         });
 
         JMenuItem intermediateItem = new JMenuItem("Intermediate");
         intermediateItem.addActionListener(e -> {
             statusBar.setText("Intermediate difficulty selected.");
             board.newGame(20);
+            AudioPlayer.playSound("wow.wav");
         });
 
         JMenuItem difficultItem = new JMenuItem("Difficult");
         difficultItem.addActionListener(e -> {
             statusBar.setText("Difficult difficulty selected.");
             board.newGame(50);
+            AudioPlayer.playSound("wow.wav");
         });
 
         optionsMenu.add(easyItem);
@@ -114,13 +117,15 @@ public class SudokuMain extends JFrame {
         // Help Menu
         JMenu helpMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
-        aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
+        aboutItem.addActionListener(
+                e -> JOptionPane.showMessageDialog(this,
                 "Sudoku Game\nCreated by group 15 \nEnjoy the game!",
                 "About Sudoku", JOptionPane.INFORMATION_MESSAGE));
 
+
         helpMenu.add(aboutItem);
 
-        // Tambahkan menu ke menu bar
+        //  menu ke menu bar
         menuBar.add(fileMenu);
         menuBar.add(optionsMenu);
         menuBar.add(helpMenu);

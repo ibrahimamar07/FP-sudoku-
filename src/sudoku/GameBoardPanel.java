@@ -129,6 +129,7 @@ public class GameBoardPanel extends JPanel {
                 }
             } else {
                 // If invalid input, clear the field and show an error message
+                AudioPlayer.playSound("salah.wav");
                 sourceCell.setText("");
                 JOptionPane.showMessageDialog(GameBoardPanel.this, "Invalid input. Please enter a number.");
             }
