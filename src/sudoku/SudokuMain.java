@@ -2,7 +2,7 @@
  * ES234317-Algorithm and Data Structures
  * Semester Ganjil, 2024/2025
  * Group Capstone Project
- * Group #1
+ * Group 15
  * 1 - 5026231195- ibrahim amar alfanani
  * 2 - 5026231219- ghifari rabbani A
  * 3 - 5026231180 - favian astama
@@ -112,7 +112,7 @@ public class SudokuMain extends JFrame {
         JMenu helpMenu = new JMenu("Help");
         JMenuItem aboutItem = new JMenuItem("About");
         aboutItem.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Sudoku Game\nCreated by kelompok 10 \nEnjoy the game!",
+                "Sudoku Game\nCreated by group 15 \nEnjoy the game!",
                 "About Sudoku", JOptionPane.INFORMATION_MESSAGE));
 
         helpMenu.add(aboutItem);
